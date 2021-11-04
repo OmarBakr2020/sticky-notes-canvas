@@ -1,7 +1,8 @@
+document.onmousedown = clearMenus;
+
 let Zmax = 0;
 let notesCount = 0;
 let z = 0;
-document.onmousedown = clearMenus;
 
 function allowDrop(event) {
     event.preventDefault();
@@ -58,14 +59,12 @@ function DrawNote() {
     let titleInput = document.createElement('textarea');
     titleInput.placeholder = 'Title';
     titleInput.className = 'title';
-    titleInput.onkeydown = keyDown;
     note.appendChild(titleInput);
 
     //Create text box for the content of the note
     let textBox = document.createElement('textarea');
     textBox.placeholder = 'Write your note here'
     textBox.className = 'description';
-    textBox.onkeydown = keyDown;
     note.appendChild(textBox);
 
     //Create the option button for the note
@@ -89,8 +88,6 @@ function DrawNote() {
     rotatorIcon.className = 'fas fa-sync-alt';
     rotator.appendChild(rotatorIcon);
 
-
-
     note.id = 'Note' + notesCount;
 
     container.appendChild(note);
@@ -99,19 +96,8 @@ function DrawNote() {
 }
 
 function DeleteNote() {
-    const myDiv = document.getElementsByClassName("notes-container")[0];
-    myDiv.innerHTML = "";
-}
-
-function keyDown() {
-    checkOverflow(this);
-}
-
-function checkOverflow(textBox) {
-    textBox.style.height = "";
-    while (textBox.scrollHeight > textBox.clientHeight) {
-        textBox.style.height = (textBox.clientHeight + 2) + 'px';
-    }
+    const notesContainer = document.getElementsByClassName("notes-container")[0];
+    notesContainer.innerHTML = "";
 }
 
 function drop(event) {
@@ -146,13 +132,6 @@ function drag(event) {
 }
 
 function noteMenu() {
-    console.log('option button pressed');
-
-    let menus = document.getElementsByClassName('note-menu'); // Get all menus
-
-    for (let i = 0; i < menus.length; i++) {
-        menus[i].remove();
-    }
 
     let noteMenu = document.createElement('div');
     noteMenu.className = "note-menu";
@@ -196,7 +175,6 @@ function noteMenu() {
 }
 
 function setColor() {
-    console.log('color button pressed');
 
     let note = this.parentNode.parentNode;
     let newColor = this.style.backgroundColor;
@@ -208,9 +186,6 @@ function setColor() {
 }
 
 function clearMenus(event) {
-    console.log('Clear menus');
-    console.log('ClientX: ' + event.clientX);
-    console.log('ClientY: ' + event.clientY);
 
     let noteMenus = document.getElementsByClassName('note-menu'); // Get all menus
 
@@ -230,15 +205,6 @@ function clearMenus(event) {
 
 function deleteNote() {
     let thisNote = this.parentNode.parentNode;
-
-    let notes = document.getElementsByClassName('note');
-    let oldRects = new Map(); // Initialize an array for the old note positions
-
-    // Collect all the current note positions
-    for (let i = 0; i < notes.length; i++) {
-        let rect = notes[i].getBoundingClientRect();
-        oldRects.set(notes[i].id, rect);
-    }
 
     thisNote.remove();
 }
