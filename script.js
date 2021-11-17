@@ -133,6 +133,13 @@ function drag(event) {
 
 function noteMenu() {
 
+    let menus = document.getElementsByClassName('note-menu'); // Get all menus
+    let thisNoteHasMenu = (this.parentNode.getElementsByClassName('note-menu').length != 0); //Whether this particular note has an active menu
+
+    for (let i = 0; i < menus.length; i++) {
+        menus[i].remove();
+    }
+
     let noteMenu = document.createElement('div');
     noteMenu.className = "note-menu";
 
