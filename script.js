@@ -36,11 +36,8 @@ function DrawNote() {
 
     const container = document.getElementsByClassName('notes-container')[0];
 
-    const containerHeight = document.documentElement.clientHeight - 120;
-    const containerWidth = document.documentElement.clientWidth - 120;
-
-    const currentTop = Math.random() * containerHeight + 1;
-    const currentLeft = Math.random() * containerWidth + 1;
+    const currentTop = 75;
+    const currentLeft = 61;
     const angle = Math.random() * (20 - (-20) + 1) + (-20);
 
     notesCount++;

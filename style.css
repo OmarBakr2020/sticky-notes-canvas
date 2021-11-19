@@ -1,7 +1,10 @@
 .notes-container {
   height: 100vh;
   position: relative;
-  background-color: lightgray;
+  /* background-color: lightgray; */
+  background: url(/images/pexels-digital-buggu-207908.jpg) fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .notes-container .Note {
