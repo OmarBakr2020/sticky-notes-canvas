@@ -94,9 +94,13 @@ function DrawNote() {
 
 function DeleteNote() {
     const notes = document.getElementsByClassName("Note");
+    const canvas = document.querySelector("#canvas");
     while (notes.length > 0) {
         notes[0].parentNode.removeChild(notes[0]);
     }
+    const context = canvas.getContext('2d');
+
+    context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 function drop(event) {
@@ -168,7 +172,7 @@ window.onload = function () {
     document.querySelector("#eraser").addEventListener("click", function () { mode = "eraser"; }, false);
     // document.querySelector("#select").addEventListener("click", function () { mode = ""; }, false);
 
-    let notes = document.getElementsByClassName('Note');
+    // let notes = document.getElementsByClassName('Note');
     const onPaint = () => {
 
         ctx.beginPath();
@@ -186,48 +190,50 @@ window.onload = function () {
         }
     }
 
-    if (window.File && window.FileList && window.FileReader) {
-        var filesInput = document.getElementById("files");
+    // ---------- FOR UPLOADING IMAGES ---------- //
 
-        filesInput.addEventListener("change", function (event) {
+    // if (window.File && window.FileList && window.FileReader) {
+    //     const filesInput = document.getElementById("files");
 
-            var files = event.target.files; //FileList object
-            var output = document.getElementById("result");
+    //     filesInput.addEventListener("change", function (event) {
 
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
+    //         const files = event.target.files; //FileList object
+    //         const output = document.getElementById("result");
 
-                //Only pics
-                if (!file.type.match('image'))
-                    continue;
+    //         for (let i = 0; i < files.length; i++) {
+    //             const file = files[i];
 
-                var picReader = new FileReader();
+    //             //Only pics
+    //             if (!file.type.match('image'))
+    //                 continue;
 
-                picReader.addEventListener("load", function (event) {
+    //             const picReader = new FileReader();
 
-                    var picFile = event.target;
+    //             picReader.addEventListener("load", function (event) {
 
-                    var div = document.createElement("div");
+    //                 const picFile = event.target;
 
-                    div.innerHTML = "<img class='thumbnail' src='" + picFile.result + "'" +
-                        "title='" + picFile.name + "'/>";
+    //                 const div = document.createElement("div");
 
-                    output.insertBefore(div, null);
-                    div.style.position = "absolute";
-                    div.style.left = "1100px";
-                    div.style.top = "100px";
+    //                 div.innerHTML = "<img class='thumbnail' src='" + picFile.result + "'" +
+    //                     "title='" + picFile.name + "'/>";
 
-                });
+    //                 output.insertBefore(div, null);
+    //                 div.style.position = "absolute";
+    //                 div.style.left = "1100px";
+    //                 div.style.top = "100px";
 
-                //Read the image
-                picReader.readAsDataURL(file);
-            }
+    //             });
 
-        });
-    }
-    else {
-        console.log("Your browser does not support File API");
-    }
+    //             //Read the image
+    //             picReader.readAsDataURL(file);
+    //         }
+
+    //     });
+    // }
+    // else {
+    //     console.log("Your browser does not support File API");
+    // }
 }
 
 function noteMenu() {
