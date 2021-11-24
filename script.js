@@ -93,8 +93,10 @@ function DrawNote() {
 }
 
 function DeleteNote() {
-    const notesContainer = document.getElementsByClassName("notes-container")[0];
-    notesContainer.innerHTML = "";
+    const notes = document.getElementsByClassName("Note");
+    while (notes.length > 0) {
+        notes[0].parentNode.removeChild(notes[0]);
+    }
 }
 
 function drop(event) {
@@ -125,6 +127,106 @@ function drag(event) {
     if (parseInt(event.target.getAttribute('data-z')) < Zmax) {
         Zmax++;
         event.target.setAttribute('data-z', Zmax);
+    }
+}
+
+window.onload = function () {
+    let mode;
+    let canvas = document.querySelector("#canvas");
+    let ctx = canvas.getContext("2d");
+
+    let sketch = document.querySelector(".notes-container");
+    let sketch_style = getComputedStyle(sketch);
+    canvas.width = parseInt(sketch_style.getPropertyValue("width"));
+    canvas.height = parseInt(sketch_style.getPropertyValue("height"));
+
+    let mouse = { x: 0, y: 0 };
+    let last_mouse = { x: 0, y: 0 };
+
+    canvas.addEventListener("mousemove", function (e) {
+        last_mouse.x = mouse.x;
+        last_mouse.y = mouse.y;
+
+        mouse.x = e.pageX - this.offsetLeft;
+        mouse.y = e.pageY - this.offsetTop;
+    }, false);
+
+    ctx.linewidth = 5;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    ctx.strokeStyle = "black";
+
+    canvas.addEventListener("mousedown", (e) => {
+        canvas.addEventListener("mousemove", onPaint, false);
+    }, false)
+
+    canvas.addEventListener("mouseup", (e) => {
+        canvas.removeEventListener("mousemove", onPaint, false);
+    }, false)
+
+    document.querySelector("#pen").addEventListener("click", function () { mode = "pen"; }, false);
+    document.querySelector("#eraser").addEventListener("click", function () { mode = "eraser"; }, false);
+    // document.querySelector("#select").addEventListener("click", function () { mode = ""; }, false);
+
+    let notes = document.getElementsByClassName('Note');
+    const onPaint = () => {
+
+        ctx.beginPath();
+        if (mode === "pen") {
+            ctx.globalCompositeOperation = "source-over";
+            ctx.moveTo(last_mouse.x, last_mouse.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.closePath();
+            ctx.stroke();
+
+        } else {
+            ctx.globalCompositeOperation = "destination-out";
+            ctx.arc(last_mouse.x, last_mouse.y, 10, 0, Math.PI * 2, false);
+            ctx.fill();
+        }
+    }
+
+    if (window.File && window.FileList && window.FileReader) {
+        var filesInput = document.getElementById("files");
+
+        filesInput.addEventListener("change", function (event) {
+
+            var files = event.target.files; //FileList object
+            var output = document.getElementById("result");
+
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+
+                //Only pics
+                if (!file.type.match('image'))
+                    continue;
+
+                var picReader = new FileReader();
+
+                picReader.addEventListener("load", function (event) {
+
+                    var picFile = event.target;
+
+                    var div = document.createElement("div");
+
+                    div.innerHTML = "<img class='thumbnail' src='" + picFile.result + "'" +
+                        "title='" + picFile.name + "'/>";
+
+                    output.insertBefore(div, null);
+                    div.style.position = "absolute";
+                    div.style.left = "1100px";
+                    div.style.top = "100px";
+
+                });
+
+                //Read the image
+                picReader.readAsDataURL(file);
+            }
+
+        });
+    }
+    else {
+        console.log("Your browser does not support File API");
     }
 }
 
